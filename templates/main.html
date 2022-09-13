@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+    <style>
+        #newsLabel {
+            width: 240px;
+            height: 40px;
+            border-radius: 4px;
+            background-color: #fff;
+            border: solid 1px #cccccc;
+            text-align: left;
+            padding: 7.5px 15px;
+            color: #ccc;
+            letter-spacing: 0.7px;
+            margin-top: 25px;
+
+
+        }
+
+        .caret {
+            float: right;
+            margin-top: 9px;
+            display: block;
+        }
+
+        .dropdown-menu {
+            width: 240px;
+            padding: 0;
+            margin: 0;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        .dropdown button:hover,
+        .dropdown button:focus {
+            border: none;
+            outline: 0;
+        }
+
+        .dropdown.open button#newsLabel {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+
+            box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.23);
+            border: solid 1px #666;
+            border-bottom: none;
+        }
+
+        .dropdown.open ul {
+            box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.23);
+            border: solid 1px #666;
+            border-top: none;
+            height: 200px;
+            overflow-y: scroll;
+        }
+
+        .dropdown-menu li {
+
+            line-height: 1.5;
+            letter-spacing: 0.7px;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 7.5px 15px;
+            border-top: solid 1px #f3f3f3;
+
+
+
+        }
+
+        .dropdown-menu li:hover {
+            background-color: #ccc;
+        }
+    </style>
+
+    <title>HT News Aggregator</title>
+</head>
+
+<body>
+
+
+
+    <section id="header" class="jumbotron text-center">
+        <a href="https://ht21992.pythonanywhere.com/en/" target="_blank"> <img
+                src="https://camo.githubusercontent.com/db8586eca4835cab7ba0c6ce5108cf8063daddd693fe40103656f0927a6ffb01/68747470733a2f2f692e6962622e636f2f4a3271573266632f576562702d6e65742d726573697a65696d6167652d312e706e67"></a>
+        <h1 class="display-3 mb-2">News Aggregator</h1>
+        <p class="lead" id="Website">News Source - <a id="currentWebsite" target='_blank'
+                href="https://www.vox.com/">Vox</a></p>
+
+        <div class="row d-flex justify-content-center">
+            <input id="search_box" type="text" class="form-control mb-3" style="width: 200px;"
+                placeholder="Search News">
+        </div>
+        <a href="" hx-get="{% url 'refresh-news' %}" hx-target="#display-box" hx-vals="js:{website:getCurrentWebsite()}"
+            class="btn btn-outline-primary">Refresh</a>
+
+        <p id="UpdateTime" style="font-size:13px ;" class="mt-3"></p>
+    </section>
+
+    <section id="gallery">
+        <div class="container">
+            <b>Select The Source</b>
+            <div class="dropdown mb-5">
+                <button id="newsLabel" class="dropdown-select" type="button" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    Vox
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="newsLabel">
+                    <li hx-get="{% url 'change-website' %}" hx-vals="js:{website:getWebsite()}" hx-target="#display-box"
+                        id="Vox"><img height="30" width="30"
+                            src="data:image/png;base64,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">
+                        Vox</li>
+                    <li hx-get="{% url 'change-website' %}" hx-vals="js:{website:getWebsite()}" hx-target="#display-box"
+                        id="Time"><img style="background-color: red;"
+                            src="https://d2ip7iv1l4ergv.cloudfront.net/Upload/1fe57992162746f9bd9c6ca452f1078d_50.png?1657538548000?1663071788000"
+                            width="50" height="20"> Time</li>
+                    <li hx-get="{% url 'change-website' %}" hx-vals="js:{website:getWebsite()}" hx-target="#display-box"
+                        id="NPR"><img src="https://media.npr.org/chrome_svg/npr-logo.svg" width="50" height="30"> NPR
+                    </li>
+                </ul>
+            </div>
+            <div class="row" id="display-box">
+                {% include 'partials/news.html' %}
+            </div>
+        </div>
+    </section>
+
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+
+        <div class="col-md-4 d-flex align-items-center">
+            <a target="_blank" href="https://ht21992.pythonanywhere.com/"
+                class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1 text-center">
+                <img
+                    src="https://camo.githubusercontent.com/db8586eca4835cab7ba0c6ce5108cf8063daddd693fe40103656f0927a6ffb01/68747470733a2f2f692e6962622e636f2f4a3271573266632f576562702d6e65742d726573697a65696d6167652d312e706e67"></a>
+        </div>
+    </footer>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.8.0"></script>
+    <script>
+        var rdata, input, box
+        $('.dropdown-menu li').on('click', function () {
+            var getValue = $(this).text();
+            $('.dropdown-select').text(getValue);
+        });
+
+        function getWebsite() {
+            return event.target.id
+        }
+
+        function getCurrentWebsite() {
+
+            return $('#currentWebsite').html()
+
+        }
+    </script>
+
+</body>
+
+
+
+</html>

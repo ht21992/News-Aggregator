@@ -1,0 +1,80 @@
+{% for headline in headlines %}
+<div class="col-lg-4 mb-4">
+    <div class="card" style="height:410px">
+        <img src="{{headline.image}}" alt="" class="card-img-top">
+        <div class="card-body">
+            <h5 class="card-title" style="color: gray;font-size:12px">{{headline.date_and_author}}</h5>
+            <p class="card-text">{{headline.title}}</p>
+            <a target="_blank" href="{{headline.link}}" class="btn btn-outline-success btn-sm">Read
+                More</a>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<script>
+    try {
+
+        $('#Website').html("News Source - <a id='currentWebsite' target='_blank' href='https://www.{{website}}.com/''>{{website}}</a>")
+        $('#UpdateTime').html("Updated: <b>{{update_time}}</b>")
+    }
+
+    catch (ReferenceError) {
+        // Do nothing
+    }
+
+</script>
+
+<script>
+
+    news = '{{headlines}}'
+
+    news = news.replace(/&#x27;/g, '"')
+
+    news = news.replace(/[\u0000-\u001F]+/g, '');
+    rdata = JSON.parse(news)
+
+
+    input = document.getElementById('search_box')
+    box = document.getElementById('display-box')
+    input.addEventListener('keyup', (e) => {
+        box.innerHTML = ''
+        filteredArticles = filterByValue(rdata, e.target.value.toLowerCase())
+        // console.log(filteredArticles)
+        if (filteredArticles.length > 0) {
+            filteredArticles.map(article => {
+                box.innerHTML += `<div class="col-lg-4 mb-4">
+                    <div class="card" style="height:410px">
+                        <img src="${article['image']}" alt="" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title" style="color: gray;font-size:12px">${article['date_and_author']}</h5>
+                            <p class="card-text">${article['title']}</p>
+                            <a target="_blank" href="${article['link']}" class="btn btn-outline-success btn-sm">Read More</a>
+
+                        </div>
+                    </div>
+                </div>`
+
+            }) // end of map
+
+        } // end of if
+
+        else {
+
+            box.innerHTML += 'Nothing Found'
+        } // end of else
+
+    })
+
+    function filterByValue(array, string) {
+        return array.filter(o =>
+            Object.keys(o).some(k => o[k].toLowerCase().includes(string.toLowerCase())));
+
+
+    }
+
+
+
+
+
+</script>
