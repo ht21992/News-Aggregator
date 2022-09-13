@@ -15,4 +15,5 @@ News Aggregator from three diffrent news source : Vox , Time, NPR using django ,
 
 ~~~
 
+![image](https://user-images.githubusercontent.com/47816410/189907026-c2c0feca-bad9-458a-8e8a-b1c11437511f.png)
 
