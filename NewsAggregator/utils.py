@@ -16,11 +16,9 @@ def get_vox_headlines() -> list:
                                                       }]
     """
 
-    r = httpx.get("https://www.vox.com/world")
+    r = httpx.get("https://www.vox.com/world-politics")
     soup = BeautifulSoup(r.content, 'html.parser')
-
     headlines_html = soup.find_all("div", {"class": "c-compact-river__entry"})
-
     headlines_list = list()
     for headline in headlines_html:
         image_src = headline.select('img')[-1].attrs["src"]
